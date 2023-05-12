@@ -29,8 +29,9 @@ public class DesktopDropPlugin: NSObject, FlutterPlugin {
     d.autoresizingMask = [.width, .height]
 
     d.registerForDraggedTypes(NSFilePromiseReceiver.readableDraggedTypes.map { NSPasteboard.PasteboardType($0) })
-    d.registerForDraggedTypes([NSPasteboard.PasteboardType.fileURL])
-
+    if #available(macOS 10.13, *) {
+        d.registerForDraggedTypes([NSPasteboard.PasteboardType.fileURL])
+    }
     vc.view.addSubview(d)
 
     registrar.addMethodCallDelegate(instance, channel: channel)
