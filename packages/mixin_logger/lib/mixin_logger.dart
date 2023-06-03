@@ -64,32 +64,55 @@ extension _LogLevelExtension on _LogLevel {
   }
 }
 
+///
+/// Init logger to write log to file.
+///
+/// [logDir] the directory to store log files.
+/// [fileLeading] the leading of log file content, it will be written
+///               to the first line of each log file.
 Future<void> initLogger(
   String logDir, {
   int maxFileCount = 10,
   int maxFileLength = 1024 * 1024 * 10, // 10 MB
+  String? fileLeading,
 }) async {
   assert(maxFileCount > 1, 'maxFileCount must be greater than 1');
   assert(maxFileLength > 10 * 1024, 'maxFileLength must be greater than 10 KB');
-  await platform.initLogger(logDir, maxFileCount, maxFileLength);
+  if (fileLeading != null) {
+    assert(fileLeading.length < maxFileLength, 'fileLeading is too long');
+  }
+  await platform.initLogger(logDir, maxFileCount, maxFileLength, fileLeading);
 }
 
+/// Set the leading of log file content, it will be written
+/// to the first line of each log file.
+void setLoggerFileLeading(String? leading) {
+  platform.setLoggerFileLeading(leading);
+}
+
+/// verbose log
 void v(String message) {
   _print(message, _LogLevel.verbose);
 }
 
+/// debug log
 void d(String message) {
   _print(message, _LogLevel.debug);
 }
 
+/// info log
 void i(String message) {
   _print(message, _LogLevel.info);
 }
 
+/// warning log
 void w(String message) {
   _print(message, _LogLevel.warning);
 }
 
+/// error log
+/// [error] the error object
+/// [stackTrace] the stack trace of the error
 void e(String message, [Object? error, StackTrace? stackTrace]) {
   var messageWithStack = message;
   if (error != null) {
@@ -101,6 +124,7 @@ void e(String message, [Object? error, StackTrace? stackTrace]) {
   _print(messageWithStack, _LogLevel.error);
 }
 
+/// wtf log
 void wtf(String message) {
   _print(message, _LogLevel.wtf);
 }

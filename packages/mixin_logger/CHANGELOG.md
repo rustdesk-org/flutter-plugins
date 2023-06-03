@@ -1,3 +1,11 @@
+## 0.0.6
+
+* add `setLoggerFileLeading` api.
+
+## 0.0.5
+
+* support config new log file content leading.
+
 ## 0.0.4
 
 * Fix write to file not working after hot restarted.
